@@ -6,7 +6,7 @@ import (
 	"fmt"
 	resty "github.com/go-resty/resty/v2"
 	"github.com/google/uuid"
-	"github.com/sgerogia/sol-stablecoin/tpp-client/bank"
+	"github.com/sgerogia/hello-stablecoin/tpp-client/bank"
 	"go.uber.org/zap"
 	"net/http"
 	"regexp"

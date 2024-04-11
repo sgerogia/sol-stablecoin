@@ -2,9 +2,9 @@ package bank_impl_test
 
 import (
 	"github.com/google/uuid"
-	"github.com/sgerogia/sol-stablecoin/tpp-client/bank"
-	bank_impl "github.com/sgerogia/sol-stablecoin/tpp-client/bank/impl"
-	test_util "github.com/sgerogia/sol-stablecoin/tpp-client/util"
+	"github.com/sgerogia/hello-stablecoin/tpp-client/bank"
+	bank_impl "github.com/sgerogia/hello-stablecoin/tpp-client/bank/impl"
+	test_util "github.com/sgerogia/hello-stablecoin/tpp-client/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"

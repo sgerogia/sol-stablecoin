@@ -1,7 +1,7 @@
 package test_util
 
 import (
-	"github.com/sgerogia/sol-stablecoin/tpp-client/bank"
+	"github.com/sgerogia/hello-stablecoin/tpp-client/bank"
 	"os"
 )
 

@@ -3,6 +3,7 @@ import "@nomicfoundation/hardhat-toolbox";
 import "hardhat-deploy";
 import "@nomiclabs/hardhat-ethers";
 import "@solidstate/hardhat-bytecode-exporter";
+import "./tasks"
 
 // Infura API
 const API_KEY = process.env.INFURA_TOKEN

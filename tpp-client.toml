@@ -1,0 +1,27 @@
+Title = "Example TPP client configuration"
+
+[BankClient]
+# Your Natwest sandbox settings
+ClientId = "XYZ"
+ClientSecret = "ABC"
+RedirectUrl = "http://localhost:8080/callback"
+
+[Ethereum]
+# Settings for local Ganache
+# ProviderUrl = "ws://localhost:8545"
+# ChainId = 1337
+# Settings for Sepolia & Infura
+ProviderUrl = "wss://sepolia.infura.io/ws/v3/YOUR_KEY"
+ChainId = 11155111
+# Common settings
+ContractAddress = "0x1234567890123456789012345678901234567890"
+MaxGas = 300000 # Must be >21k. Too high value will cause "exceeds block gas limit"
+
+[Tuning]
+CronSchedule = 5
+BankClientTimeout = 30
+
+[BankAccount]
+SortCode = "500000"
+AccountNumber = "87654301"
+AccountName = "ProvableGBP Limited"

@@ -41,6 +41,8 @@ const config: HardhatUserConfig = {
             accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
             url: "http://127.0.0.1:8545",
             chainId: 1337,
+            gas: 2100000,
+            gasPrice: 600000000,
         },
 
         // Polygon live networks

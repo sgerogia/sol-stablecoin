@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/sgerogia/hello-stablecoin/tpp-client/encrypt"
+	"github.com/sgerogia/sol-stablecoin/tpp-client/encrypt"
 	"github.com/stretchr/testify/assert"
 )
 

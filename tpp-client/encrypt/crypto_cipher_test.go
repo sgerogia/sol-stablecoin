@@ -2,7 +2,7 @@ package encrypt_test
 
 import (
 	"encoding/json"
-	"github.com/sgerogia/hello-stablecoin/tpp-client/encrypt"
+	"github.com/sgerogia/sol-stablecoin/tpp-client/encrypt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"

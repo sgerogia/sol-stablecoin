@@ -22,3 +22,4 @@ This is a monorepo composed of 2 folders
 ## Requirements
 
 * Node 18 (`nvm install 18`)
+* Go 1.19+

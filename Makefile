@@ -5,3 +5,6 @@ build-contract:
 
 test-contract:
 	cd chain && npx hardhat test
+
+test-client:
+	cd tpp-client && go test ./...

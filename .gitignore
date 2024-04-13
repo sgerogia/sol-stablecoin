@@ -3,3 +3,7 @@
 node_modules
 cache
 typechain-types
+.vscode
+
+tpp-client-neon.toml
+tpp

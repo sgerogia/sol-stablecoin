@@ -20,8 +20,10 @@ type Config struct {
 		MaxGas          int64
 	}
 	Tuning struct {
-		CronSchedule      int
+		BankCronSchedule  int
+		ChainCronSchedule int
 		BankClientTimeout int
+		StartingBlock     uint64
 	}
 	BankAccount struct {
 		SortCode      string

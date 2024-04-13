@@ -27,5 +27,8 @@ func TestLoadConfigData(t *testing.T) {
 	assert.Equal(t, int64(11155111), c.Ethereum.ChainId)
 	assert.Equal(t, "http://localhost:8080/callback", c.BankClient.RedirectUrl)
 	assert.Equal(t, 30, c.Tuning.BankClientTimeout)
+	assert.Equal(t, 5, c.Tuning.BankCronSchedule)
+	assert.Equal(t, 1, c.Tuning.ChainCronSchedule)
+	assert.Equal(t, uint64(10), c.Tuning.StartingBlock)
 	assert.Equal(t, "ProvableGBP Limited", c.BankAccount.AccountName)
 }

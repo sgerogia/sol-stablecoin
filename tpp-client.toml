@@ -10,6 +10,9 @@ RedirectUrl = "http://localhost:8080/callback"
 # Settings for local Ganache
 # ProviderUrl = "ws://localhost:8545"
 # ChainId = 1337
+# Settings for NeonEVM DevNet
+# ProviderUrl = "https://devnet.neonevm.org"
+# ChainId = 245022926
 # Settings for Sepolia & Infura
 ProviderUrl = "wss://sepolia.infura.io/ws/v3/YOUR_KEY"
 ChainId = 11155111
@@ -18,8 +21,10 @@ ContractAddress = "0x1234567890123456789012345678901234567890"
 MaxGas = 300000 # Must be >21k. Too high value will cause "exceeds block gas limit"
 
 [Tuning]
-CronSchedule = 5
+BankCronSchedule = 5
+ChainCronSchedule = 1
 BankClientTimeout = 30
+StartingBlock = 10
 
 [BankAccount]
 SortCode = "500000"

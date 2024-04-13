@@ -19,7 +19,7 @@ import (
 	"time"
 )
 
-func TestEventHandlerLifecycle(t *testing.T) {
+func TestEventHandlerLifecyclePollEvents(t *testing.T) {
 
 	// --- arrange ---
 
@@ -44,15 +44,14 @@ func TestEventHandlerLifecycle(t *testing.T) {
 		sch,
 		testingCtx.l)
 
-	subscriber := event_impl.NewEventSubscriber(
-		handler,
-		testingCtx.chainInfo.TppContractClient,
-		testingCtx.l)
-
-	// task and schedule
-	task := schedule.NewPaymentStatusTask(sch, bankClient, handler, testingCtx.l)
+	// 2. task and schedule polling payments
+	paymentTask := schedule.NewPaymentStatusTask(sch, bankClient, handler, testingCtx.l)
 	s := gocron.NewScheduler(time.UTC)
-	s.Every(5).Seconds().Do(task.CheckPaymentStatuses)
+	s.Every(5).Seconds().Do(paymentTask.CheckPaymentStatuses)
+	// Create a task to poll contract events but do not schedule it to 
+	// - avoid race conditions while asserting, and
+	// - make debugging easier
+	chainTask := schedule.NewContractEventTask(uint64(0), testingCtx.chainInfo.TppContractClient, &handler, testingCtx.l)
 	s.StartAsync()
 	defer s.Stop()
 
@@ -60,15 +59,6 @@ func TestEventHandlerLifecycle(t *testing.T) {
 	payerKeyPair := testingCtx.chainInfo.PayerKeyPair
 
 	payerEncKey := testingCtx.chainInfo.PayerKeyPair.PublicEncrKeyBytes()[:]
-
-	// 2. Listen for events
-	ok, err := subscriber.SubscribeToMintRequestEvent()
-	assert.True(t, ok)
-	require.NoError(t, err)
-
-	ok, err = subscriber.SubscribeToAuthGrantedEvent()
-	assert.True(t, ok)
-	require.NoError(t, err)
 
 	// --- act & assert ---
 
@@ -97,7 +87,9 @@ func TestEventHandlerLifecycle(t *testing.T) {
 	require.NoError(t, err)
 	testingCtx.chainInfo.Backend.Commit()
 
-	// 2. TPP auto-handles the MintRequest event. Sleep while we are processing...
+	// 2. Emulate TPP auto-handling the MintRequest event. Sleep while we are processing...
+	chainTask.FetchAndProcessEvents()
+	chainTask.FetchAndProcessEvents() // 2 calls to ensure we consume only once
 	time.Sleep(5 * time.Second)
 	// ...Have we received the MintRequest event?
 	logs := testingCtx.o.FilterLevelExact(zap.InfoLevel).
@@ -158,7 +150,9 @@ func TestEventHandlerLifecycle(t *testing.T) {
 	require.NoError(t, err)
 	testingCtx.chainInfo.Backend.Commit()
 
-	// 6. Auto-handle the AuthGranted event. Sleep while we are processing...
+	// 6. Emulate auto-handling the AuthGranted event. Sleep while we are processing...
+	chainTask.FetchAndProcessEvents()
+	chainTask.FetchAndProcessEvents() // 2 calls to ensure we consume only once
 	time.Sleep(5 * time.Second)
 	// ...Have we received the AuthGranted event?
 	logs = testingCtx.o.FilterLevelExact(zap.InfoLevel).

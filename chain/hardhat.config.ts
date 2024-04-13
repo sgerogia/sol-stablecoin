@@ -11,15 +11,15 @@ const API_KEY = process.env.INFURA_TOKEN
 const MAINNET_RPC_URL = "https://mainnet.infura.io/v3/" + API_KEY
 const GOERLI_RPC_URL = "https://goerli.infura.io/v3/" + API_KEY
 const SEPOLIA_RPC_URL = "https://sepolia.infura.io/v3/" + API_KEY
-// Polygon
-const MUMBAI_RPC_URL = "https://matic-mumbai.chainstacklabs.com"
-const MATIC_RPC_URL = "https://matic-mainnet.chainstacklabs.com"
+// NeonEVM
+const NEON_DEVNET_RPC_URL = "https://devnet.neonevm.org"
+const NEON_MAINNET_RPC_URL = "https://neon-proxy-mainnet.solana.p2p.org"
 
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY
 // optional
 const MNEMONIC = process.env.MNEMONIC || "Your mnemonic"
-const FORKING_BLOCK_NUMBER = process.env.FORKING_BLOCK_NUMBER
+const FORKING_BLOCK_NUMBER = process.env.FORKING_BLOCK_NUMBER !== undefined ? parseInt(process.env.FORKING_BLOCK_NUMBER) : 0
 
 // Your API key for Etherscan, obtain one at https://etherscan.io/
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "Your etherscan API key"
@@ -45,24 +45,18 @@ const config: HardhatUserConfig = {
             gasPrice: 600000000,
         },
 
-        // Polygon live networks
-        mumbai: { // testnet
-            url: MUMBAI_RPC_URL,
+        // NeonEVM live networks
+        neondevnet: { 
+            url: NEON_DEVNET_RPC_URL,
             accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
-            //   accounts: {
-            //     mnemonic: MNEMONIC,
-            //   },
             saveDeployments: true,
-            chainId: 80001,
+            chainId: 245022926,
         },
-        matic: { // mainnet
-            url: MATIC_RPC_URL,
+        neonmainnet: {
+            url: NEON_MAINNET_RPC_URL,
             accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
-            //   accounts: {
-            //     mnemonic: MNEMONIC,
-            //   },
             saveDeployments: true,
-            chainId: 137,
+            chainId: 245022934,
         },
 
         // Ethereum live networks
@@ -104,8 +98,26 @@ const config: HardhatUserConfig = {
         // npx hardhat verify --network <NETWORK> <CONTRACT_ADDRESS> <CONSTRUCTOR_PARAMETERS>
         apiKey: {
             goerli: ETHERSCAN_API_KEY,
+            neonevm: "test"
         },
-        customChains: [] // w/o this empty key, verification fails miserably
+        customChains: [
+            {
+                network: "neonevm",
+                chainId: 245022926,
+                urls: {
+                    apiURL: "https://devnet-api.neonscan.org/hardhat/verify",
+                    browserURL: "https://devnet.neonscan.org"
+                }
+            },
+            {
+                network: "neonevm",
+                chainId: 245022934,
+                urls: {
+                    apiURL: "https://api.neonscan.org/hardhat/verify",
+                    browserURL: "https://neonscan.org"
+                }
+            }
+        ] 
     },
     gasReporter: {
         enabled: REPORT_GAS,

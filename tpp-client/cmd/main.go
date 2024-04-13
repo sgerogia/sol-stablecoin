@@ -138,27 +138,33 @@ func startClients(
 		chainClient,
 		l)
 
-	// start the chain event subscriber
-	l.Infow("Starting chain event subscriber",
-		"chainId", conf.Ethereum.ChainId,
-		"contract", conf.Ethereum.ContractAddress)
-	ok, err := subscriber.SubscribeToMintRequestEvent()
-	if err != nil || !ok {
-		return nil, nil, errors.New("Unable to subscribe to MintRequestEvent: " + err.Error())
-	}
+	// // start the chain event subscriber
+	// l.Infow("Starting chain event subscriber",
+	// 	"chainId", conf.Ethereum.ChainId,
+	// 	"contract", conf.Ethereum.ContractAddress)
+	// ok, err := subscriber.SubscribeToMintRequestEvent()
+	// if err != nil || !ok {
+	// 	return nil, nil, errors.New("Unable to subscribe to MintRequestEvent: " + err.Error())
+	// }
 
-	ok, err = subscriber.SubscribeToAuthGrantedEvent()
-	if err != nil || !ok {
-		return nil, nil, errors.New("Unable to subscribe to AuthGrantedEvent: " + err.Error())
-	}
+	// ok, err = subscriber.SubscribeToAuthGrantedEvent()
+	// if err != nil || !ok {
+	// 	return nil, nil, errors.New("Unable to subscribe to AuthGrantedEvent: " + err.Error())
+	// }
 
 	// schedule bank polling
 	l.Info("Starting bank polling scheduler")
-	task := schedule.NewPaymentStatusTask(sch, bankClient, handler, l)
+	paymentTask := schedule.NewPaymentStatusTask(sch, bankClient, handler, l)
 	s := gocron.NewScheduler(time.UTC)
-	s.Every(conf.Tuning.CronSchedule).Seconds().Do(task.CheckPaymentStatuses)
-	s.StartAsync()
+	s.Every(conf.Tuning.BankCronSchedule).Seconds().Do(paymentTask.CheckPaymentStatuses)
 
+	// schedule chain polling
+	l.Info("Starting contract polling scheduler")
+	contractTask := schedule.NewContractEventTask(conf.Tuning.StartingBlock, chainClient, &handler, l)
+	s.Every(conf.Tuning.ChainCronSchedule).Seconds().Do(contractTask.FetchAndProcessEvents)
+	
+	s.StartAsync()
+	
 	return &subscriber, s, nil
 }
 

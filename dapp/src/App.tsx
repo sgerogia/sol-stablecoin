@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import { getDefaultProvider } from 'ethers'
 
-import { DAppProvider, useEtherBalance, useEthers, Config, DEFAULT_SUPPORTED_CHAINS, Mainnet, Goerli } from '@usedapp/core'
+import { DAppProvider, useEtherBalance, useEthers, Config, DEFAULT_SUPPORTED_CHAINS, Mainnet, Sepolia } from '@usedapp/core'
 import { Neon, NeonDevnet, NeonDevnetProvider } from './util/neon-chain'
 import { formatEther } from '@ethersproject/units'
 
@@ -11,8 +11,8 @@ const config: Config = {
   autoConnect: true,
   readOnlyChainId: NeonDevnet.chainId,
   readOnlyUrls: {
-    [Mainnet.chainId]: getDefaultProvider('mainnet'),
-    [Goerli.chainId]: getDefaultProvider('goerli'),
+    [Mainnet.chainId]: 'https://mainnet.infura.io/v3/8381b69184e54ff38ee0a1ebb60e8e63',
+    [Sepolia.chainId]: 'https://sepolia.infura.io/v3/8381b69184e54ff38ee0a1ebb60e8e63',
     // [Neon.chainId]: 'https://neon-proxy-mainnet.solana.p2p.org',
     // [NeonDevnet.chainId]: 'https://devnet.neonevm.org',
   },

@@ -17,6 +17,7 @@ numbers and names).
 This is a monorepo composed of 2 folders  
 * `chain`: the enhanced ERC-20 smart contract, its unit tests and Hardhat tasks
 * `tpp-client`: the Golang Ethereum process to automate the miniting/redemption process and OpenBanking flow
+* `dapp`: the user-facing dApp
 
 
 ## Requirements
